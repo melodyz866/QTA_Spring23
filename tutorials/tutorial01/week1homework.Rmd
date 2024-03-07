@@ -1,0 +1,33 @@
+---
+title: "Homework Week1"
+author: "shengbin zhang"
+date: "2024-01-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(quanteda)
+library(quanteda.textplots)
+
+## R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+  
+```{r}
+
+df2022 <- readRDS("/Users/zhangshengbinmelody/Documents/GitHub/QTA_Spring23/tutorials/tutorial02/data/df2022")
+
+#  similar columns in df2022 as in df2023
+df2022 <- df2022[df2022$type == "article" & df2022$section_id == "world", ]
+df2022 <- df2022[!duplicated(df2022$web_title), ]
+
+corpus_ukr2022 <- corpus(df2022, docid_field = "web_title", text_field = "body_text")
+# Apply the same text cleaning, tokenization, and normalization steps
+tokens_ukr2022 <- tokens(corpus_ukr2022)
+dfm_ukr2022 <- dfm(tokens_ukr2022)
+
+
+print(topfeatures(dfm_ukr2022))
+
+
+# Wordcloud for 2022 data
+textplot_wordcloud(dfm_ukr2022, min_size = 1, max_size = 10, max_words = 100)
